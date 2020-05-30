@@ -1,0 +1,35 @@
+df_aggregated=df.groupby(['POSTING_YEAR', 'POSTING_MONTH','KEY'])['GROSS_SALES_QTY'].sum().reset_index()
+
+lysm=[]  #lysm : last Year Same Month
+lysm_minus_1=[] #lysm : last Year Same Month  minus 1
+lysm_minus_2=[]  #lysm : last Year Same Month minus 2
+lylm=[]
+lylm_minus_1=[]
+lylm_minus_2=[]
+avg_sales_3m=[]
+for i in range(len(df_aggregated)):
+        curr_key= df_aggregated.iloc[i,2]
+        lysm_key=int(curr_key)-100 #lysm : last Year Same Month
+        lysm_minus_1_key=int(curr_key)-200 #lysm : last Year Same Month minus 1
+        lysm_minus_2_key=int(curr_key)-300 #lysm : last Year Same Month minus 2
+        
+        #calculate lylm
+        if lysm_key in df_aggregated.iloc[:,2].tolist():
+            a=df_aggregated.index[df_aggregated['KEY'] == lysm_key].tolist()
+            lysm.append(df_aggregated.iloc[a,3].tolist()[0])
+        else:
+            lysm.append(df_aggregated.iloc[i,3].tolist())
+            
+        #calculate lylm minus 1
+        if lysm_minus_1_key in df_aggregated.iloc[:,2].tolist():
+            a=df_aggregated.index[df_aggregated['KEY'] == lysm_minus_1_key].tolist()
+            lysm_minus_1.append(df_aggregated.iloc[a,3].tolist()[0])
+        else:
+            lysm_minus_1.append(df_aggregated.iloc[i,3].tolist())
+        
+        #calculate lylm minus 2
+        if lysm_minus_2_key in df_aggregated.iloc[:,2].tolist():
+            a=df_aggregated.index[df_aggregated['KEY'] == lysm_minus_2_key].tolist()
+            lysm_minus_2.append(df_aggregated.iloc[a,3].tolist()[0])
+        else:
+            lysm_minus_2.append(df_aggregated.iloc[i,3].tolist())
