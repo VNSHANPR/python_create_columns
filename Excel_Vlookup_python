@@ -5,7 +5,7 @@ lysm_minus_1=[] #lysm : last Year Same Month  minus 1
 lysm_minus_2=[]  #lysm : last Year Same Month minus 2
 lylm=[]
 lylm_minus_1=[]
-lylm_minus_2=[]
+lylm_minus2=[]
 avg_sales_3m=[]
 for i in range(len(df_aggregated)):
         curr_key= df_aggregated.iloc[i,2]
@@ -13,23 +13,101 @@ for i in range(len(df_aggregated)):
         lysm_minus_1_key=int(curr_key)-200 #lysm : last Year Same Month minus 1
         lysm_minus_2_key=int(curr_key)-300 #lysm : last Year Same Month minus 2
         
-        #calculate lylm
+        #calculate lysm
         if lysm_key in df_aggregated.iloc[:,2].tolist():
-            a=df_aggregated.index[df_aggregated['KEY'] == lysm_key].tolist()
-            lysm.append(df_aggregated.iloc[a,3].tolist()[0])
+            a1=df_aggregated.index[df_aggregated['KEY'] == lysm_key].tolist()
+            lysm.append(df_aggregated.iloc[a1,3].tolist()[0])
         else:
             lysm.append(df_aggregated.iloc[i,3].tolist())
             
-        #calculate lylm minus 1
+        #calculate lysm minus 1
         if lysm_minus_1_key in df_aggregated.iloc[:,2].tolist():
-            a=df_aggregated.index[df_aggregated['KEY'] == lysm_minus_1_key].tolist()
-            lysm_minus_1.append(df_aggregated.iloc[a,3].tolist()[0])
+            a2=df_aggregated.index[df_aggregated['KEY'] == lysm_minus_1_key].tolist()
+            lysm_minus_1.append(df_aggregated.iloc[a2,3].tolist()[0])
         else:
-            lysm_minus_1.append(df_aggregated.iloc[i,3].tolist())
+            if lysm_key in df_aggregated.iloc[:,2].tolist():
+                lysm_minus_1.append(df_aggregated.iloc[a1,3].tolist()[0]) 
+            else:
+                lysm_minus_1.append(df_aggregated.iloc[i,3].tolist())
         
-        #calculate lylm minus 2
+        #calculate lysm minus 2
         if lysm_minus_2_key in df_aggregated.iloc[:,2].tolist():
-            a=df_aggregated.index[df_aggregated['KEY'] == lysm_minus_2_key].tolist()
-            lysm_minus_2.append(df_aggregated.iloc[a,3].tolist()[0])
+            a3=df_aggregated.index[df_aggregated['KEY'] == lysm_minus_2_key].tolist()
+            lysm_minus_2.append(df_aggregated.iloc[a3,3].tolist()[0])
         else:
-            lysm_minus_2.append(df_aggregated.iloc[i,3].tolist())
+            if lysm_minus_1_key in df_aggregated.iloc[:,2].tolist():
+                lysm_minus_2.append(df_aggregated.iloc[a2,3].tolist()[0])
+            elif lysm_key in df_aggregated.iloc[:,2].tolist():
+                    lysm_minus_2.append(df_aggregated.iloc[a1,3].tolist()[0])
+            else: 
+                lysm_minus_2.append(df_aggregated.iloc[i,3].tolist())
+                
+           #calculate lylm key M-1
+        if str(curr_key)[4:] == '01':
+            yr=int(str(curr_key)[:4])-1
+            new_key=str(yr)+str(12)
+            lylm_key=int(new_key)
+        else:
+            lylm_key=curr_key-1 #lysm : last Year Same Month
+            
+            #calculate lylm-1 key M-2
+        if str(curr_key)[4:] == '01':
+            yr=int(str(curr_key)[:4])-1
+            new_key_1=str(yr)+str(11)
+            lylm_minus2_key=int(new_key_1)
+        elif str(curr_key)[4:] == '02':
+            yr=int(str(curr_key)[:4])-1
+            new_key_1=str(yr)+str(12)
+            lylm_minus2_key=int(new_key_1) #lysm : last Year Same Month
+        else:
+            lylm_minus2_key=curr_key-2
+            
+            #lylm : last Year Same Month LM-1
+            
+        if lylm_key in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_key].tolist()
+            lylm.append(df_aggregated.iloc[am1,3].tolist()[0]) #201903
+        elif lylm_key-100 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_key-100].tolist()
+            lylm.append(df_aggregated.iloc[am1,3].tolist()[0]) #201803
+        elif lylm_key-200 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_key-200].tolist()
+            lylm.append(df_aggregated.iloc[am1,3].tolist()[0]) #201703
+        elif lylm_key-300 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_key-300].tolist()
+            lylm.append(df_aggregated.iloc[am1,3].tolist()[0]) #201603
+        elif lylm_key-400 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_key-400].tolist()
+            lylm.append(df_aggregated.iloc[am1,3].tolist()[0]) #201503
+        elif lylm_key-500 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_key-500].tolist()
+            lylm.append(df_aggregated.iloc[am1,3].tolist()[0]) #201603
+        
+        else:
+            lylm.append(df_aggregated.iloc[i,3].tolist()) #201603
+            
+            
+        #lylm : last Year last Month LM-2
+        if lylm_minus2_key in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_minus2_key].tolist()
+            lylm_minus2.append(df_aggregated.iloc[am1,3].tolist()[0]) #201903
+        elif lylm_minus2_key-100 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_minus2_key-100].tolist()
+            lylm_minus2.append(df_aggregated.iloc[am1,3].tolist()[0]) #201803
+        elif lylm_minus2_key-200 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_minus2_key-200].tolist()
+            lylm_minus2.append(df_aggregated.iloc[am1,3].tolist()[0]) #201703
+        elif lylm_minus2_key-300 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_minus2_key-300].tolist()
+            lylm_minus2.append(df_aggregated.iloc[am1,3].tolist()[0]) #201603
+        elif lylm_minus2_key-400 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_minus2_key-400].tolist()
+            lylm_minus2.append(df_aggregated.iloc[am1,3].tolist()[0]) #201503
+        elif lylm_minus2_key-500 in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_minus2_key-500].tolist()
+            lylm_minus2.append(df_aggregated.iloc[am1,3].tolist()[0]) #20160
+        elif lylm_key in df_aggregated.iloc[:,2].tolist():
+            am1=df_aggregated.index[df_aggregated['KEY'] == lylm_key].tolist()
+            lylm_minus2.append(df_aggregated.iloc[am1,3].tolist()[0]) #20160
+        else:
+            lylm_minus2.append(df_aggregated.iloc[i,3].tolist()) #201603
