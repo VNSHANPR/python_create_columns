@@ -1,0 +1,13 @@
+import io
+import csv
+import pandas as pd
+
+def on_input(msg):
+    data = io.StringIO(msg)
+    df = pd.read_csv(data, sep=",",header=0)
+    csv_out=df.to_csv(index=False)
+
+
+    api.send("out",csv_out)
+
+api.set_port_callback("input", on_input)
